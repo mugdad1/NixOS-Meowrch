@@ -118,7 +118,7 @@
       "splash"
     ];
     # Use latest kernel by default; NVIDIA module overrides to stable for driver compatibility
-    kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+    kernelPackages = lib.mkDefault pkgs.linuxPackages_zen;
     # Plymouth disabled: causes DRM lock issues and blinking cursor on some GPUs
     plymouth.enable = false;
   };
