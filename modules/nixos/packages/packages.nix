@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 # Примечание: все пакеты из pkgs/ (mewline, pawlette, hotkeyhub,
 # meowrch-settings, meowrch-tools) автоматически доступны через overlay-meowrch.
 # Добавляйте их в home.packages / programs, а не сюда.
@@ -7,171 +12,176 @@
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                             ТЕРМИНАЛ И ОБОЛОЧКА                         ║
     # ╚════════════════════════════════════════════════════════════════════════════╝
-        kitty                      # GPU-терминал (быстрый, кастомизируемый)
-        fish                       # Современная оболочка командной строки
-        starship                   # Кроссплатформенный быстрый prompt для shell
-        fastfetch                  # Быстрый вывод информации о системе
+    kitty # GPU-терминал (быстрый, кастомизируемый)
+    fish # Современная оболочка командной строки
+    starship # Кроссплатформенный быстрый prompt для shell
+    fastfetch # Быстрый вывод информации о системе
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                           ФАЙЛОВЫЕ МЕНЕДЖЕРЫ                            ║
     # ╚════════════════════════════════════════════════════════════════════════════╝
-        nemo                       # Файловый менеджер Cinnamon (графический)
-        ranger                     # Файловый менеджер для терминала
-        zenity                     # Диалоговые окна GTK+ через shell (скрипты)
+    nemo # Файловый менеджер Cinnamon (графический)
+    ranger # Файловый менеджер для терминала
+    zenity # Диалоговые окна GTK+ через shell (скрипты)
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                       WAYLAND / HYPRLAND УТИЛИТЫ                        ║
     # ╚════════════════════════════════════════════════════════════════════════════╝
-        xwayland                   # X11 сервер для Wayland (совместимость)
-        wl-clipboard               # Копирование/вставка для Wayland (clipboard)
-        cliphist                   # История буфера обмена для Wayland
-        grim                       # Скриншоты для Wayland (grab image)
-        slurp                      # Выделение области экрана для grim
-        swww                       # Динамические обои для Wayland
-        rofi                       # Лаунчер приложений (меню)
-        swaylock-effects           # Локскрин для Wayland с эффектами
-        hyprlock                   # Новый локскрин для Hyprland
-        pamixer                    # Управление громкостью через PulseAudio
-        playerctl                  # Управление медиаплеерами через MPRIS
-        kdePackages.polkit-kde-agent-1 # Агент polkit для KDE (авторизация)
+    xwayland # X11 сервер для Wayland (совместимость)
+    wl-clipboard # Копирование/вставка для Wayland (clipboard)
+    cliphist # История буфера обмена для Wayland
+    grim # Скриншоты для Wayland (grab image)
+    slurp # Выделение области экрана для grim
+    swww # Динамические обои для Wayland
+    rofi # Лаунчер приложений (меню)
+    swaylock-effects # Локскрин для Wayland с эффектами
+    hyprlock # Новый локскрин для Hyprland
+    pamixer # Управление громкостью через PulseAudio
+    playerctl # Управление медиаплеерами через MPRIS
+    kdePackages.polkit-kde-agent-1 # Агент polkit для KDE (авторизация)
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                              ВЕБ И СЕТЬ                                  ║
     # ╚════════════════════════════════════════════════════════════════════════════╝
-        firefox                    # Веб-браузер Firefox
-        wget                       # Загрузка файлов по HTTP/FTP
-        curl                       # HTTP-клиент для командной строки
-        networkmanagerapplet       # Апплет NetworkManager для панели
+    firefox # Веб-браузер Firefox
+    wget # Загрузка файлов по HTTP/FTP
+    curl # HTTP-клиент для командной строки
+    networkmanagerapplet # Апплет NetworkManager для панели
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                              РАЗРАБОТКА                                  ║
     # ╚════════════════════════════════════════════════════════════════════════════╝
-        # --- Редакторы и инструменты Nix ---
-        zed-editor                 # Редактор Zed (из nixos-25.11)
-        nil                        # Язык спецификации Nix (форматирование)
-        nixd                       # Язык-сервер для Nix (LSP)
-        alejandra                  # Форматтер для Nix (используется в Zed)
+    # --- Редакторы и инструменты Nix ---
+    zed-editor # Редактор Zed (из nixos-25.11)
+    nil # Язык спецификации Nix (форматирование)
+    nixd # Язык-сервер для Nix (LSP)
+    alejandra # Форматтер для Nix (используется в Zed)
+    vscodium-fhs
+    # --- Системы контроля версий ---
+    git # Система контроля версий Git
 
-        # --- Системы контроля версий ---
-        git                        # Система контроля версий Git
+    # --- Компиляторы и инструменты сборки ---
+    gcc # Компилятор GCC (C/C++)
+    clang # Компилятор Clang/LLVM (C/C++)
+    nodejs # JavaScript runtime (Node.js)
+    ripgrep # Быстрый поиск по файлам (rg)
+    cmake # Система сборки CMake
+    gnumake # GNU Make
 
-        # --- Компиляторы и инструменты сборки ---
-        gcc                        # Компилятор GCC (C/C++)
-        clang                      # Компилятор Clang/LLVM (C/C++)
-        nodejs                     # JavaScript runtime (Node.js)
-        ripgrep                    # Быстрый поиск по файлам (rg)
-        cmake                      # Система сборки CMake
-        gnumake                    # GNU Make
-
-        # --- Python ---
-        (python3.withPackages (ps: with ps; [ pyyaml pillow ]))
-        python3Packages.pip        # pip для Python 3 (менеджер пакетов)
+    # --- Python ---
+    (python3.withPackages (
+      ps: with ps; [
+        pyyaml
+        pillow
+      ]
+    ))
+    python3Packages.pip # pip для Python 3 (менеджер пакетов)
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                                ОБЩЕНИЕ                                   ║
     # ╚════════════════════════════════════════════════════════════════════════════╝
-        discord                    # Discord клиент (чат, голос)
-        telegram-desktop           # Клиент Telegram (из 25.11)
+    discord # Discord клиент (чат, голос)
+    telegram-desktop # Клиент Telegram (из 25.11)
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                              МУЛЬТИМЕДИА                                 ║
     # ╚════════════════════════════════════════════════════════════════════════════╝
-        spotify                    # Клиент Spotify (музыка)
-        mpv                        # Видеоплеер MPV (универсальный)
-        obs-studio                 # OBS Studio для записи/стриминга
-        feh                        # Просмотр изображений (легковесный)
-        ffmpeg                     # Мультимедийный фреймворк
-        imagemagick                # Работа с изображениями
+    spotify # Клиент Spotify (музыка)
+    mpv # Видеоплеер MPV (универсальный)
+    obs-studio # OBS Studio для записи/стриминга
+    feh # Просмотр изображений (легковесный)
+    ffmpeg # Мультимедийный фреймворк
+    imagemagick # Работа с изображениями
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                          ИГРЫ И ГРАФИКА                                  ║
     # ╚════════════════════════════════════════════════════════════════════════════╝
-        # --- Оптимизация и overlay ---
-        gamemode                   # Оптимизация производительности игр
-        mangohud                   # Overlay с FPS и статистикой
+    # --- Оптимизация и overlay ---
+    gamemode # Оптимизация производительности игр
+    mangohud # Overlay с FPS и статистикой
 
-        # --- Совместимость Windows ---
-        wine                       # Запуск Windows-приложений
-        winetricks                 # Скрипты для настройки Wine
+    # --- Совместимость Windows ---
+    wine # Запуск Windows-приложений
+    winetricks # Скрипты для настройки Wine
 
-        # --- Графические библиотеки ---
-        mesa                       # OpenGL реализация (Mesa)
-        libGL                      # OpenGL библиотеки
-        libva                      # Аппаратное ускорение видео VA-API
-        libvdpau                   # Аппаратное ускорение видео VDPAU
-        vulkan-loader              # Загрузчик Vulkan (runtime)
-        vulkan-tools               # Инструменты Vulkan (отладка)
-        vulkan-validation-layers   # Слои валидации Vulkan (debug)
-        # amdvlk removed from nixpkgs (deprecated by AMD); RADV from mesa is used instead
-        dxvk                       # DirectX 9/10/11 → Vulkan (DXVK)
-        mesa-demos                 # Демо-программы для Mesa (тесты)
+    # --- Графические библиотеки ---
+    mesa # OpenGL реализация (Mesa)
+    libGL # OpenGL библиотеки
+    libva # Аппаратное ускорение видео VA-API
+    libvdpau # Аппаратное ускорение видео VDPAU
+    vulkan-loader # Загрузчик Vulkan (runtime)
+    vulkan-tools # Инструменты Vulkan (отладка)
+    vulkan-validation-layers # Слои валидации Vulkan (debug)
+    # amdvlk removed from nixpkgs (deprecated by AMD); RADV from mesa is used instead
+    dxvk # DirectX 9/10/11 → Vulkan (DXVK)
+    mesa-demos # Демо-программы для Mesa (тесты)
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                        СИСТЕМНЫЕ УТИЛИТЫ                                 ║
     # ╚════════════════════════════════════════════════════════════════════════════╝
-        # --- Мониторинг системы ---
-        htop                       # Интерактивный монитор процессов
-        btop                       # Современный монитор ресурсов
-        radeontop                  # Монитор AMD GPU
+    # --- Мониторинг системы ---
+    htop # Интерактивный монитор процессов
+    btop # Современный монитор ресурсов
+    radeontop # Монитор AMD GPU
 
-        # --- Управление дисками ---
-        gnome-disk-utility         # Управление дисками GNOME
-        parted                     # Разметка дисков (CLI)
-        gparted                    # Разметка дисков (GUI)
+    # --- Управление дисками ---
+    gnome-disk-utility # Управление дисками GNOME
+    parted # Разметка дисков (CLI)
+    gparted # Разметка дисков (GUI)
 
-        # --- Архивы ---
-        unzip                      # Распаковка ZIP
-        unrar                      # Распаковка RAR
-        p7zip                      # 7-Zip архиватор
-        kdePackages.ark            # Архиватор KDE
+    # --- Архивы ---
+    unzip # Распаковка ZIP
+    unrar # Распаковка RAR
+    p7zip # 7-Zip архиватор
+    kdePackages.ark # Архиватор KDE
 
-        # --- Bluetooth ---
-        blueman                    # Менеджер Bluetooth (GUI)
-        bluez                      # Стек Bluetooth
-        bluez-tools                # Инструменты Bluetooth (CLI)
+    # --- Bluetooth ---
+    blueman # Менеджер Bluetooth (GUI)
+    bluez # Стек Bluetooth
+    bluez-tools # Инструменты Bluetooth (CLI)
 
-        # --- Сеть ---
-        openssh                    # SSH клиент и сервер
+    # --- Сеть ---
+    openssh # SSH клиент и сервер
 
-        # --- Системная информация ---
-        usbutils                   # USB утилиты (lsusb)
-        pciutils                   # PCI утилиты (lspci)
-        lshw                       # Информация об оборудовании
-        dmidecode                  # DMI/SMBIOS информация
-        tree                       # Отображение структуры каталогов
-        file                       # Определение типа файлов
-        which                      # Поиск команд в PATH
+    # --- Системная информация ---
+    usbutils # USB утилиты (lsusb)
+    pciutils # PCI утилиты (lspci)
+    lshw # Информация об оборудовании
+    dmidecode # DMI/SMBIOS информация
+    tree # Отображение структуры каталогов
+    file # Определение типа файлов
+    which # Поиск команд в PATH
 
-        # --- Система ---
-        upower                     # Управление питанием
-        xdg-utils                  # XDG утилиты
-        gnome-keyring              # Хранилище ключей GNOME
-        libsecret                  # Библиотека для секретов
-        gcr                        # Управление сертификатами
+    # --- Система ---
+    upower # Управление питанием
+    xdg-utils # XDG утилиты
+    gnome-keyring # Хранилище ключей GNOME
+    libsecret # Библиотека для секретов
+    gcr # Управление сертификатами
 
-        # --- Утилиты рабочего стола ---
-        gnome-calculator           # Калькулятор GNOME
-        qbittorrent                # Торрент-клиент
+    # --- Утилиты рабочего стола ---
+    gnome-calculator # Калькулятор GNOME
+    qbittorrent # Торрент-клиент
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                           ТЕМЫ И ИКОНКИ                                  ║
     # ╚════════════════════════════════════════════════════════════════════════════╝
-        catppuccin-gtk             # GTK-тема Catppuccin
-        catppuccin-qt5ct           # Catppuccin тема для Qt
-        gnome-themes-extra         # Дополнительные темы GNOME
-        gsettings-desktop-schemas  # Схемы настроек рабочего стола
-        
-        # Meowrch
-        pawlette                   # Менеджер тем Meowrch
-        meowrch-themes             # Официальные темы Meowrch
-        meowrch-settings           # Системные оптимизации Meowrch
-        hotkeyhub                  # Шпаргалка по хоткеям
-        meowrch-tools              # Утилиты Meowrch
+    catppuccin-gtk # GTK-тема Catppuccin
+    catppuccin-qt5ct # Catppuccin тема для Qt
+    gnome-themes-extra # Дополнительные темы GNOME
+    gsettings-desktop-schemas # Схемы настроек рабочего стола
 
-        # Theme generation dependencies
-        themix-gui                 # Генератор тем (oomox-cli / themix)
-        sassc                      # Компилятор SASS (для генерации тем)
-        gtk-engine-murrine         # GTK2 движок (для совместимости)
-        dconf-editor               # Редактор dconf (для отладки)
+    # Meowrch
+    pawlette # Менеджер тем Meowrch
+    meowrch-themes # Официальные темы Meowrch
+    meowrch-settings # Системные оптимизации Meowrch
+    hotkeyhub # Шпаргалка по хоткеям
+    meowrch-tools # Утилиты Meowrch
+
+    # Theme generation dependencies
+    themix-gui # Генератор тем (oomox-cli / themix)
+    sassc # Компилятор SASS (для генерации тем)
+    gtk-engine-murrine # GTK2 движок (для совместимости)
+    dconf-editor # Редактор dconf (для отладки)
   ];
 }
