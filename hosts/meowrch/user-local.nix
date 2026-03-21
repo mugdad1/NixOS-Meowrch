@@ -2,5 +2,5 @@
 # Реальные настройки вашего ПК.
 {
   meowrch.user = "mugdad";
-  meowrch.hostname = "meowrch-machine";
+  meowrch.hostname = "meowrch-laptop";
 }
