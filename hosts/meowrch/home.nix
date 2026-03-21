@@ -29,6 +29,18 @@
   home.homeDirectory = lib.mkForce "/home/${meowrchUser}";
   home.stateVersion = "25.11";
 
+  # Cursor theme (critical for Wayland — without this, cursor stays default)
+  # bibata-cursors ships a built-in hyprcursor theme (no separate package needed)
+  home.pointerCursor = {
+    name = "Bibata-Modern-Classic";
+    package = pkgs.bibata-cursors;
+    size = 24;
+    gtk.enable = true;       # writes ~/.icons/default/index.theme + gtk settings
+    x11.enable = true;       # writes ~/.Xresources cursor entry
+    hyprcursor.enable = true; # sets HYPRCURSOR_THEME / HYPRCURSOR_SIZE for Hyprland
+    hyprcursor.size = 24;
+  };
+
   # ╔════════════════════════════════════════════════════════════════════════════╗
   # ║                           Пользовательские пакеты                        ║
   # ╚════════════════════════════════════════════════════════════════════════════╝
@@ -138,7 +150,7 @@
 
       extensions = {
         force = true;
-        packages = with firefox-addons.packages.${pkgs.stdenv.hostPlatform.system}; [
+        packages = with firefox-addons; [
           ublock-origin
           bitwarden
         ];
@@ -149,6 +161,12 @@
         "gfx.webrender.all" = true;
         "media.ffmpeg.vaapi.enabled" = true;
         "media.hardware-video-decoding.enabled" = true;
+
+        # Theming and UI
+        "ui.systemUsesDarkTheme" = 1;
+        "browser.theme.content-theme" = 0; # Use system theme
+        "browser.theme.toolbar-theme" = 0; # Use system theme
+        "extensions.activeThemeID" = "default-theme@mozilla.org";
 
         # Wayland
         "widget.use-xdg-desktop-portal.file-picker" = 1;
@@ -166,116 +184,9 @@
   # ║                              Zed Editor                                  ║
   # ╚════════════════════════════════════════════════════════════════════════════╝
 
-  # Zed config file
-  home.file.".config/zed/settings.json".text = builtins.toJSON {
-    # Theme
-    theme = "One Dark Pro";
-    theme_mode = "dark";
-
-    # UI Settings
-    ui_font_size = 14;
-    buffer_font_size = 14;
-    buffer_font_family = "JetBrainsMono Nerd Font";
-    ui_font_family = "JetBrainsMono Nerd Font";
-
-    # Editor settings
-    tab_size = 2;
-    soft_wrap = "editor_width";
-    show_whitespaces = "all";
-    relative_line_numbers = true;
-    cursor_blink = true;
-
-    # Git integration
-    git.git_gutter = "tracked_files";
-    git.inline_blame.enabled = true;
-
-    # Language settings
-    languages = {
-      Nix = {
-        language_servers = ["nil"];
-        formatter = {
-          external = {
-            command = "alejandra";
-            arguments = ["-"];
-          };
-        };
-      };
-    };
-
-    # Terminal
-    terminal = {
-      font_family = "JetBrainsMono Nerd Font";
-      font_size = 14;
-    };
-
-    # Auto save
-    autosave = "on_focus_change";
-    format_on_save = "on";
-
-    # File tree
-    project_panel = {
-      dock = "left";
-      default_width = 240;
-    };
-
-    # Vim mode (optional)
-    vim_mode = false;
-
-    # Assistant / AI Agent — OpenRouter (DeepSeek R1 0528 по умолчанию)
-    assistant = {
-      enabled = true;
-      version = "2";
-      default_model = {
-        provider = "openrouter";
-        model = "deepseek/deepseek-r1-0528";
-      };
-      system_prompt = "Всегда отвечай на русском языке. Код и технические термины можно оставлять на английском, но все объяснения, комментарии и ответы пиши на русском.";
-    };
-
-    # Дополнительные провайдеры AI
-    # API ключ читается из env: OPENROUTER_API_KEY (задан локально, не в git)
-    language_models = {
-      openrouter = {
-        available_models = [
-          {
-            provider = "openrouter";
-            name = "anthropic/claude-3.7-sonnet";
-            display_name = "Claude 3.7 Sonnet";
-            max_tokens = 200000;
-          }
-          {
-            provider = "openrouter";
-            name = "anthropic/claude-3.5-sonnet";
-            display_name = "Claude 3.5 Sonnet";
-            max_tokens = 200000;
-          }
-          {
-            provider = "openrouter";
-            name = "google/gemini-2.0-flash";
-            display_name = "Gemini 2.0 Flash";
-            max_tokens = 1000000;
-          }
-          {
-            provider = "openrouter";
-            name = "openai/gpt-4o";
-            display_name = "GPT-4o";
-            max_tokens = 128000;
-          }
-          {
-            provider = "openrouter";
-            name = "deepseek/deepseek-r1-0528";
-            display_name = "DeepSeek R1 0528";
-            max_tokens = 64000;
-          }
-          {
-            provider = "openrouter";
-            name = "deepseek/deepseek-r1";
-            display_name = "DeepSeek R1";
-            max_tokens = 64000;
-          }
-        ];
-      };
-    };
+  # Dynamic Zed config (writable via theme script)
+  home.file.".config/zed/settings.json" = {
+    source = config.lib.file.mkOutOfStoreSymlink "/home/${meowrchUser}/.cache/meowrch/zed/settings.json";
   };
 
   # Zed keymap file
@@ -299,9 +210,31 @@
   # ║                              Dotfiles                                    ║
   # ╚════════════════════════════════════════════════════════════════════════════╝
 
-  # Создание необходимых директорий
+  # Создание необходимых директорий и файлов-заглушек
   home.file.".local/bin/.keep".text = "";
   home.file.".config/.keep".text = "";
+  home.file.".cache/meowrch/hypr/theme.conf".text = "# Initial theme placeholder\n";
+  home.file.".cache/meowrch/kitty/theme.conf".text = "# Initial theme placeholder\n";
+  home.file.".cache/meowrch/waybar/theme.css".text = "/* Initial theme placeholder */\n";
+  home.file.".cache/meowrch/zed/settings.json".text = builtins.toJSON {
+    theme = "One Dark Pro";
+    theme_mode = "dark";
+    ui_font_size = 14;
+    buffer_font_size = 14;
+    buffer_font_family = "JetBrainsMono Nerd Font";
+    ui_font_family = "JetBrainsMono Nerd Font";
+    tab_size = 2;
+    soft_wrap = "editor_width";
+    git.git_gutter = "tracked_files";
+    assistant = {
+      enabled = true;
+      version = "2";
+      default_model = {
+        provider = "openrouter";
+        model = "deepseek/deepseek-r1-0528";
+      };
+    };
+  };
 
   # Подключение конфигураций из репозитория
   home.file.".config/hypr" = {
@@ -347,12 +280,12 @@
     force = true;
   };
   home.file.".config/meowrch/wallpapers" = {
-    source = "${pkgs.meowrch-themes}/share/pawlette/catppuccin-mocha/wallpapers";
+    source = "${pkgs.meowrch-themes}/share/wallpapers/meowrch";
     recursive = true;
     force = true;
   };
   home.file.".local/share/wallpapers" = {
-    source = "${pkgs.meowrch-themes}/share/pawlette/catppuccin-mocha/wallpapers";
+    source = "${pkgs.meowrch-themes}/share/wallpapers/meowrch";
     recursive = true;
     force = true;
   };
