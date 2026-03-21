@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 #
 # Graphics / GPU base module (shared across all GPU vendors)
 #

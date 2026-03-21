@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # ╔════════════════════════════════════════════════════════════════════════════╗
@@ -20,11 +25,11 @@
   # Системные пакеты для поддержки Flatpak
   environment.systemPackages = with pkgs; [
     flatpak
-    gnome-software  # Графический менеджер для Flatpak
+    gnome-software # Графический менеджер для Flatpak
   ];
 
   # Настройка групп пользователей для Flatpak
-  users.groups.flatpak = {};
+  users.groups.flatpak = { };
 
   # Автоматическое добавление Flathub репозитория (после подключения к сети)
   systemd.services.flatpak-repo = {

@@ -30,14 +30,19 @@
     xwayland # X11 сервер для Wayland (совместимость)
     wl-clipboard # Копирование/вставка для Wayland (clipboard)
     cliphist # История буфера обмена для Wayland
+    wl-clip-persist # Сохранение буфера обмена при закрытии приложений
     grim # Скриншоты для Wayland (grab image)
     slurp # Выделение области экрана для grim
     swww # Динамические обои для Wayland
     rofi # Лаунчер приложений (меню)
+    rofimoji # Выбор эмодзи через rofi
+    waybar # Панель статуса для Wayland
     swaylock-effects # Локскрин для Wayland с эффектами
     hyprlock # Новый локскрин для Hyprland
     pamixer # Управление громкостью через PulseAudio
     playerctl # Управление медиаплеерами через MPRIS
+    udiskie # Автоматическое монтирование дисков
+    polkit_gnome # Агент аутентификации polkit (GNOME)
     kdePackages.polkit-kde-agent-1 # Агент polkit для KDE (авторизация)
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
@@ -56,7 +61,7 @@
     nil # Язык спецификации Nix (форматирование)
     nixd # Язык-сервер для Nix (LSP)
     alejandra # Форматтер для Nix (используется в Zed)
-    vscodium-fhs
+
     # --- Системы контроля версий ---
     git # Система контроля версий Git
 

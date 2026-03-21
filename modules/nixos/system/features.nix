@@ -1,34 +1,79 @@
 # ╔════════════════════════════════════════════════════════════════════════════╗
 # ║                      ОПРЕДЕЛЕНИЯ ОПЦИОНАЛЬНЫХ ФУНКЦИЙ                    ║
 # ╚════════════════════════════════════════════════════════════════════════════╝
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.meowrch.features;
-in {
+in
+{
   options.meowrch.features = {
     # Gaming
-    steam = lib.mkOption { type = lib.types.bool; default = false; };
-    gamemode = lib.mkOption { type = lib.types.bool; default = false; };
-    mangohud = lib.mkOption { type = lib.types.bool; default = false; };
-    
+    steam = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+    gamemode = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+    mangohud = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+
     # Social
-    telegram = lib.mkOption { type = lib.types.bool; default = false; };
-    discord = lib.mkOption { type = lib.types.bool; default = false; };
-    obsidian = lib.mkOption { type = lib.types.bool; default = false; };
-    
+    telegram = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+    discord = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+    obsidian = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+
     # Office
-    libreoffice = lib.mkOption { type = lib.types.bool; default = false; };
-    thunderbird = lib.mkOption { type = lib.types.bool; default = false; };
-    
+    libreoffice = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+    thunderbird = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+
     # Development
-    docker = lib.mkOption { type = lib.types.bool; default = false; };
-    vscode = lib.mkOption { type = lib.types.bool; default = false; };
-    zed = lib.mkOption { type = lib.types.bool; default = false; };
-    
+    docker = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+    vscode = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+    zed = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+
     # System
-    flatpak = lib.mkOption { type = lib.types.bool; default = false; };
-    wine = lib.mkOption { type = lib.types.bool; default = false; };
+    flatpak = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
+    wine = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+    };
   };
 
   config = {

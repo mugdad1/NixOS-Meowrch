@@ -31,19 +31,25 @@ def parse_wallpapers(paths: List[str]):
 		return all_wallpapers
 		
 def notify(title: str, message: str, critical=False) -> None:
-	subprocess.run(['dunstify', title, message, '-u', 'critical' if critical else 'normal'])
+	subprocess.run(['notify-send', title, message, '-u', 'critical' if critical else 'normal'])
 
 def overcopy(src: Path, dst: Path) -> None:
-	if dst.exists():
-		if dst.is_dir():
+	if dst.exists() or dst.is_symlink():
+		if dst.is_dir() and not dst.is_symlink():
 			shutil.rmtree(dst)
 		else:
-			os.remove(str(dst))
+			dst.unlink(missing_ok=True)
 
 	if src.is_dir():
 		shutil.copytree(src, dst)
+		# Make everything writable in the new directory
+		for root, dirs, files in os.walk(dst):
+			for d in dirs: os.chmod(os.path.join(root, d), 0o755)
+			for f in files: os.chmod(os.path.join(root, f), 0o644)
 	else:
-		shutil.copy(src, dst)
+		dst.parent.mkdir(parents=True, exist_ok=True)
+		shutil.copy2(src, dst)
+		os.chmod(dst, 0o644)
 
 def generate_theme(template_name: str, oomox_colors: Path) -> Optional[str]:
 	template_path = OOMOX_TEMPLATES / template_name

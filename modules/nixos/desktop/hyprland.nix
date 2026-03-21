@@ -1,4 +1,10 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 {
   # Hyprland Configuration
@@ -30,8 +36,13 @@
     # For Java applications
     _JAVA_AWT_WM_NONREPARENTING = "1";
 
-    # For correct cursor size
+    # XCursor fallback for XWayland / X11 apps
+    XCURSOR_THEME = "Bibata-Modern-Classic";
     XCURSOR_SIZE = "24";
+
+    # Hyprcursor — native Wayland cursor rendering in Hyprland (crisp on HiDPI)
+    HYPRCURSOR_THEME = "Bibata-Modern-Classic";
+    HYPRCURSOR_SIZE = "24";
 
     # Force dark theme for Libadwaita
     ADW_DEBUG_COLOR_SCHEME = "prefer-dark";
@@ -56,10 +67,6 @@
     # swayidle replaced by hypridle (already in package list)
     swaylock-effects
     hyprlock
-
-    # Notifications
-    dunst
-    libnotify
 
     # Input methods
     cliphist
@@ -111,7 +118,7 @@
   # Security-related settings for Hyprland
   security = {
     # For screen locking
-    pam.services.swaylock = {};
+    pam.services.swaylock = { };
 
     # Polkit for privilege escalation
     polkit.enable = true;
@@ -123,8 +130,6 @@
       # Services configured via portal packages
     };
   };
-
-
 
   # Add to system path
   environment.pathsToLink = [ "/libexec" ];
