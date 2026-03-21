@@ -6,7 +6,7 @@ let
     owner = "meowrch";
     repo = "meowrch";
     rev = "main";
-    sha256 = "sha256-2CqwzWT9ijdVMIfog/aoUGf59b7blS2CtDPQzvbxLrM="; 
+    sha256 = "sha256-GV35PCsejRrEqPM3Np69nyiDh+49sWJAT9GmpbFUq1k="; 
   };
 
   mocha-theme = fetchFromGitHub {
@@ -20,7 +20,7 @@ let
     owner = "meowrch";
     repo = "pawlette-catppuccin-latte-theme";
     rev = "main";
-    sha256 = "sha256-vJ8xKixsvaqZttRcq0v52fhT3+L2b5bgI0CFLMXXiJ0=";
+    sha256 = "sha256-pWiGaUrkLA/xKfb0nWw9qHQnbW7HGyA8s3caBpOfWXg=";
   };
 in
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "Meowrch";
     repo = "meowrch-themes";
     rev = "main";
-    hash = "sha256-KAXoEP18KbFQLuXh1QYOKrsEdOe6zlNJpQCjrpp5mi8=";
+    hash = "sha256-iXKzWXXU+qGYdio5J+MVjv81x2v3NWPRmNxoCcbTYBI=";
   };
 
   dontBuild = true;
