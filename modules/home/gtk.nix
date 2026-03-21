@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, ... }:
 
 {
   # GTK Configuration
@@ -12,17 +7,13 @@
 
     # Force overwrite existing config files to prevent activation errors
     gtk2.configLocation = lib.mkForce "${config.xdg.configHome}/gtk-2.0/gtkrc";
-    gtk3.bookmarks =
-      let
-        home = config.home.homeDirectory;
-      in
-      [
-        "file://${home}/Documents"
-        "file://${home}/Downloads"
-        "file://${home}/Music"
-        "file://${home}/Pictures"
-        "file://${home}/Videos"
-      ];
+    gtk3.bookmarks = let home = config.home.homeDirectory; in [
+      "file://${home}/Documents"
+      "file://${home}/Downloads"
+      "file://${home}/Music"
+      "file://${home}/Pictures"
+      "file://${home}/Videos"
+    ];
 
     # Default theme — pawlette will override via gsettings when switching themes.
     # pawlette themes are provided by the meowrch-themes package.
@@ -60,7 +51,7 @@
       gtk-xft-hintstyle = "hintfull"
       gtk-xft-rgba = "rgb"
     '';
-
+    
     gtk3.extraConfig = {
       # DO NOT set gtk-application-prefer-dark-theme here — pawlette manages it via gsettings.
       # mocha sets prefer-dark, latte sets prefer-light at runtime.
@@ -178,24 +169,24 @@
       font-antialiasing = "rgba";
       font-hinting = "slight";
     };
-
+    
     "org/gnome/desktop/wm/preferences" = {
       titlebar-font = "Noto Sans Bold 11";
       button-layout = "appmenu:minimize,maximize,close";
     };
-
+    
     "org/gnome/desktop/sound" = {
       allow-volume-above-100-percent = true;
       event-sounds = false;
       input-feedback-sounds = false;
     };
-
+    
     "org/gnome/settings-daemon/plugins/color" = {
       night-light-enabled = true;
       night-light-temperature = 4000;
       night-light-schedule-automatic = true;
     };
-
+    
     "org/gnome/mutter" = {
       dynamic-workspaces = true;
       edge-tiling = true;

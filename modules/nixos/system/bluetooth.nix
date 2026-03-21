@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, ... }:
 
 {
   # Bluetooth Configuration
@@ -49,10 +44,7 @@
     blueman.enable = true;
 
     # D-Bus configuration for Bluetooth
-    dbus.packages = with pkgs; [
-      bluez
-      blueman
-    ];
+    dbus.packages = with pkgs; [ bluez blueman ];
 
     # udev rules for Bluetooth devices
     udev.packages = with pkgs; [ bluez ];

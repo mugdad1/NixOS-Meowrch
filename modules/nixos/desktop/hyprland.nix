@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
+{ config, pkgs, lib, inputs, ... }:
 
 {
   # Hyprland Configuration
@@ -118,7 +112,7 @@
   # Security-related settings for Hyprland
   security = {
     # For screen locking
-    pam.services.swaylock = { };
+    pam.services.swaylock = {};
 
     # Polkit for privilege escalation
     polkit.enable = true;
@@ -130,6 +124,8 @@
       # Services configured via portal packages
     };
   };
+
+
 
   # Add to system path
   environment.pathsToLink = [ "/libexec" ];

@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  meowrchUser,
-  ...
-}:
+{ config, pkgs, lib, meowrchUser, ... }:
 
 {
   # Security Configuration
@@ -277,7 +271,7 @@
 
   # User security groups
   users.groups = {
-    secure = { };
+    secure = {};
   };
 
   # Add security-related groups (user groups defined in main configuration.nix)

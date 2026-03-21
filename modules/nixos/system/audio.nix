@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, ... }:
 #
 # Audio stack configuration (PipeWire + WirePlumber) with sane low‑latency
 # defaults. Bluetooth is managed in a dedicated bluetooth module. Kept intentionally concise;
@@ -23,8 +18,8 @@
       support32Bit = true;
     };
 
-    pulse.enable = true; # PulseAudio replacement layer
-    jack.enable = true; # JACK compatibility
+    pulse.enable = true;   # PulseAudio replacement layer
+    jack.enable = true;    # JACK compatibility
     wireplumber.enable = true;
   };
 
@@ -106,18 +101,8 @@
   # PAM limits for real‑time & lockable memory
   ############################################
   security.pam.loginLimits = [
-    {
-      domain = "@audio";
-      type = "-";
-      item = "rtprio";
-      value = "95";
-    }
-    {
-      domain = "@audio";
-      type = "-";
-      item = "memlock";
-      value = "unlimited";
-    }
+    { domain = "@audio"; type = "-"; item = "rtprio";  value = "95"; }
+    { domain = "@audio"; type = "-"; item = "memlock"; value = "unlimited"; }
   ];
 
   ############################################

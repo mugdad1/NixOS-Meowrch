@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, ... }:
 
 {
   # ╔════════════════════════════════════════════════════════════════════════════╗
@@ -88,20 +83,9 @@
       subpixel.lcdfilter = "default";
 
       defaultFonts = {
-        monospace = [
-          "JetBrainsMono Nerd Font"
-          "Hack Nerd Font"
-          "FiraCode Nerd Font"
-        ];
-        sansSerif = [
-          "Noto Sans"
-          "Inter"
-          "Roboto"
-        ];
-        serif = [
-          "Noto Serif"
-          "DejaVu Serif"
-        ];
+        monospace = [ "JetBrainsMono Nerd Font" "Hack Nerd Font" "FiraCode Nerd Font" ];
+        sansSerif = [ "Noto Sans" "Inter" "Roboto" ];
+        serif = [ "Noto Serif" "DejaVu Serif" ];
         emoji = [ "Noto Color Emoji" ];
       };
 

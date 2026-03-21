@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
+{ config, pkgs, lib, ... }:
 
 {
   # Lean fonts configuration
@@ -16,10 +11,7 @@
       subpixel.rgba = "rgb";
       defaultFonts = {
         serif = [ "Noto Serif" ];
-        sansSerif = [
-          "Inter"
-          "Noto Sans"
-        ];
+        sansSerif = [ "Inter" "Noto Sans" ];
         monospace = [ "JetBrainsMono Nerd Font" ];
         emoji = [ "Noto Color Emoji" ];
       };
