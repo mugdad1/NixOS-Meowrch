@@ -32,7 +32,6 @@
         ../../modules/nixos/system/audio.nix
         ../../modules/nixos/system/bluetooth.nix
         ../../modules/nixos/system/graphics.nix
-        ../../modules/nixos/system/graphics-amd.nix
         ../../modules/nixos/system/networking.nix
         ../../modules/nixos/system/security.nix
         ../../modules/nixos/system/services.nix

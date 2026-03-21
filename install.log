@@ -1,4 +1,4 @@
---- Meowrch NixOS Installation Log: Sat Mar 21 09:42:31 PM MSK 2026 ---
+--- Meowrch NixOS Installation Log: Sat Mar 21 10:00:21 PM MSK 2026 ---
 [H[2J[0;35m
                           ▄▀▄     ▄▀▄           ▄▄▄▄▄
                          ▄█░░▀▀▀▀▀░░█▄         █░▄▄░░█
@@ -52,33 +52,30 @@
 [1;33m==> Installing System[0m
 [0;34m[INFO] Staging files in Git...[0m
 [0;34m[INFO] Verification of critical files:[0m
--rw-r--r-- 1 mugdad users   3944 Mar 21 21:02 flake.nix
--rw-r--r-- 1 mugdad mugdad 14846 Mar 21 21:42 hosts/meowrch/configuration.nix
--rw-r--r-- 1 mugdad users    946 Mar 21 21:42 hosts/meowrch/hardware-configuration.nix
--rw-r--r-- 1 mugdad users   9143 Mar 21 21:02 hosts/meowrch/home.nix
+-rw-r--r-- 1 mugdad mugdad  3944 Mar 21 21:50 flake.nix
+-rw-r--r-- 1 mugdad mugdad 14846 Mar 21 22:00 hosts/meowrch/configuration.nix
+-rw-r--r-- 1 mugdad mugdad   946 Mar 21 22:00 hosts/meowrch/hardware-configuration.nix
+-rw-r--r-- 1 mugdad mugdad  9143 Mar 21 21:50 hosts/meowrch/home.nix
 [0;34m[INFO] Starting 'nixos-rebuild boot' with --impure...[0m
 warning: Git tree '/home/mugdad/NixOS-Meowrch' is dirty
-building the system configuration...
-warning: Git tree '/home/mugdad/NixOS-Meowrch' is dirty
-these 8 derivations will be built:
-  /nix/store/dq6xi9i029djq0gbrm3yfmzaxgzbq5fj-string-hosts.drv
-  /nix/store/bm762c9ag7xm1zy9apgvkpix32bm87f6-hosts.drv
-  /nix/store/ckyii0xmlc6xlc3cdb6vzxg2rp27h9gm-avahi-daemon.conf.drv
-  /nix/store/qbrlswj8spss9r68wk77rpg1z1nhlf0h-unit-avahi-daemon.service.drv
-  /nix/store/hhd1523i39kz7dn8nabibm7fxrw46ir4-system-units.drv
-  /nix/store/v2jfn3c5w1b196bzmmzqkrrqr29kgkaa-etc-hostname.drv
-  /nix/store/7idgq42499gd4swcyyw1np57yk9pw10q-etc.drv
-  /nix/store/v7n6v0jbszxcnyyqhmgiillxmflgf98m-nixos-system-meowrch-laptop-25.11.20260320.812b398.drv
-building '/nix/store/v2jfn3c5w1b196bzmmzqkrrqr29kgkaa-etc-hostname.drv'...
-building '/nix/store/dq6xi9i029djq0gbrm3yfmzaxgzbq5fj-string-hosts.drv'...
-building '/nix/store/ckyii0xmlc6xlc3cdb6vzxg2rp27h9gm-avahi-daemon.conf.drv'...
-building '/nix/store/bm762c9ag7xm1zy9apgvkpix32bm87f6-hosts.drv'...
-building '/nix/store/qbrlswj8spss9r68wk77rpg1z1nhlf0h-unit-avahi-daemon.service.drv'...
-building '/nix/store/hhd1523i39kz7dn8nabibm7fxrw46ir4-system-units.drv'...
-building '/nix/store/7idgq42499gd4swcyyw1np57yk9pw10q-etc.drv'...
-building '/nix/store/v7n6v0jbszxcnyyqhmgiillxmflgf98m-nixos-system-meowrch-laptop-25.11.20260320.812b398.drv'...
-Done. The new configuration is /nix/store/40pn0jsj36dfj1cikz8jmxrkg5w3lwrr-nixos-system-meowrch-laptop-25.11.20260320.812b398
+error:
+       … while calling the 'seq' builtin
+         at /nix/store/8ggk1060asqg0dl17gbysd9zknlzhjca-source/lib/modules.nix:361:18:
+          360|         options = checked options;
+          361|         config = checked (removeAttrs config [ "_module" ]);
+             |                  ^
+          362|         _module = checked (config._module);
 
-[0;32mUpdate Complete![0m
-[0;34mDetailed logs are saved to: /home/mugdad/NixOS-Meowrch/install.log[0m
-Changes will be applied on next boot. Please reboot your system.
+       … while evaluating a branch condition
+         at /nix/store/8ggk1060asqg0dl17gbysd9zknlzhjca-source/lib/modules.nix:297:9:
+          296|       checkUnmatched =
+          297|         if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [ ] then
+             |         ^
+          298|           let
+
+       (stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+       error: path '/nix/store/0af4ipffmfajfxdkq1sl93vbvwdp9f34-source/modules/nixos/system/graphics-amd.nix' does not exist
+Command 'nix --extra-experimental-features 'nix-command flakes' build --print-out-paths '.#nixosConfigurations."meowrch".config.system.build.nixos-rebuild' --impure --no-link' returned non-zero exit status 1.
+
+[0;31m[ERROR] Installation failed at line 245. Check /home/mugdad/NixOS-Meowrch/install.log for details.[0m
