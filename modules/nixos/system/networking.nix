@@ -1,4 +1,11 @@
-{ config, pkgs, lib, meowrchUser, meowrchHostname, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  meowrchUser,
+  meowrchHostname,
+  ...
+}:
 
 {
   # Networking Configuration
@@ -39,29 +46,40 @@
     };
 
     # Enable systemd-resolved
-    nameservers = [ "1.1.1.1" "8.8.8.8" "1.0.0.1" "8.8.4.4" ];
+    nameservers = [
+      "1.1.1.1"
+      "8.8.8.8"
+      "1.0.0.1"
+      "8.8.4.4"
+    ];
 
     # Firewall configuration
     firewall = {
       enable = true;
       allowedTCPPorts = [
-        22    # SSH
-        80    # HTTP
-        443   # HTTPS
-        8080  # Alternative HTTP
+        22 # SSH
+        80 # HTTP
+        443 # HTTPS
+        8080 # Alternative HTTP
       ];
       allowedUDPPorts = [
-        53    # DNS
-        67    # DHCP
-        68    # DHCP
+        53 # DNS
+        67 # DHCP
+        68 # DHCP
       ];
 
       # Allow specific applications
       allowedTCPPortRanges = [
-        { from = 1714; to = 1764; } # KDE Connect
+        {
+          from = 1714;
+          to = 1764;
+        } # KDE Connect
       ];
       allowedUDPPortRanges = [
-        { from = 1714; to = 1764; } # KDE Connect
+        {
+          from = 1714;
+          to = 1764;
+        } # KDE Connect
       ];
 
       # Disable ping
@@ -71,7 +89,11 @@
       logReversePathDrops = true;
 
       # Enable connection tracking helpers
-      connectionTrackingModules = [ "ftp" "irc" "sane" ];
+      connectionTrackingModules = [
+        "ftp"
+        "irc"
+        "sane"
+      ];
 
       # Custom rules
       extraCommands = ''
@@ -97,7 +119,7 @@
     };
 
     # Network bridge for VMs
-    bridges = {};
+    bridges = { };
 
     # DHCP configuration
     dhcpcd.enable = false; # We use NetworkManager
@@ -123,10 +145,15 @@
     resolved = {
       enable = true;
       domains = [ "~." ];
-      fallbackDns = [ "1.1.1.1" "8.8.8.8" "1.0.0.1" "8.8.4.4" ];
+      fallbackDns = [
+        "1.1.1.1"
+        "8.8.8.8"
+        "1.0.0.1"
+        "8.8.4.4"
+      ];
       dnssec = lib.mkDefault "true";
       extraConfig = ''
-        DNS=1.1.1.1 8.8.8.8 1.0.0.1 8.8.4.4
+        DNS=8.8.8.8 1.0.0.1 8.8.4.4
         DNSOverTLS=yes
         MulticastDNS=yes
         LLMNR=yes
