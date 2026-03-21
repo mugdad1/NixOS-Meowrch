@@ -17,6 +17,8 @@
       ./hardware-configuration.nix
       /etc/nixos/hardware-configuration.nix
     ];
+    userPackagesPath = ./user-packages.nix;
+    userFeaturesPath = ./user-features.nix;
   in (
     [
       # System / hardware related modules
@@ -28,6 +30,7 @@
       ../../modules/nixos/system/security.nix
       ../../modules/nixos/system/services.nix
       ../../modules/nixos/system/fonts.nix
+      ../../modules/nixos/system/features.nix
 
       # Desktop / theming
       ../../modules/nixos/desktop/sddm.nix
@@ -38,6 +41,8 @@
       ../../modules/nixos/packages/flatpak.nix
     ]
     ++ lib.optional (hardwareConfigPath != null) hardwareConfigPath
+    ++ lib.optional (lib.pathExists userPackagesPath) userPackagesPath
+    ++ lib.optional (lib.pathExists userFeaturesPath) userFeaturesPath
     ++ lib.optional (hardwareConfigPath == null) {
       fileSystems."/" = {
         device = "/dev/disk/by-label/nixos";
@@ -92,8 +97,8 @@
       "quiet"
       "splash"
     ];
-    # Use the latest kernel
-    kernelPackages = pkgs.linuxPackages_latest;
+    # Use latest kernel by default; nvidia module overrides this to stable for compatibility
+    kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
     # Plymouth causes blinking underscore / DRM locks on some GPUs, disabled for stability
     plymouth.enable = false;
   };
@@ -176,6 +181,8 @@
       update-pkgs = "cd ~/NixOS-Meowrch && ./scripts/update-pkg-hashes.sh && nix flake update && sudo nixos-rebuild switch --flake .#meowrch --impure";
       clean = "sudo nix-collect-garbage -d";
       search = "nix search nixpkgs";
+      b = "cd ~/NixOS-Meowrch && nix flake update && sudo nixos-rebuild switch --flake .#meowrch --impure";
+      "и" = "cd ~/NixOS-Meowrch && nix flake update && sudo nixos-rebuild switch --flake .#meowrch --impure";
     };
   };
 
