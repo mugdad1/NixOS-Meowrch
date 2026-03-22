@@ -33,7 +33,7 @@
 
       # Git configuration
       git_branch = {
-        symbol = " ";
+        symbol = " ";
         format = "on [$symbol$branch]($style) ";
         style = "bold purple";
       };
@@ -62,20 +62,46 @@
       };
 
       # Disable unnecessary modules for minimalist look
-      username = { disabled = true; };
-      hostname = { disabled = true; };
-      time = { disabled = true; };
-      battery = { disabled = true; };
-      memory_usage = { disabled = true; };
+      username = {
+        disabled = true;
+      };
+      hostname = {
+        disabled = true;
+      };
+      time = {
+        disabled = true;
+      };
+      battery = {
+        disabled = true;
+      };
+      memory_usage = {
+        disabled = true;
+      };
 
       # Language modules (minimalist)
-      python = { symbol = "🐍 "; format = "[$symbol$version]($style) "; style = "yellow bold"; };
-      nodejs = { symbol = " "; format = "[$symbol$version]($style) "; style = "bold green"; };
-      rust = { symbol = " "; format = "[$symbol$version]($style) "; style = "bold red"; };
-      golang = { symbol = " "; format = "[$symbol$version]($style) "; style = "bold cyan"; };Node
+      python = {
+        symbol = "🐍 ";
+        format = "[$symbol$version]($style) ";
+        style = "yellow bold";
+      };
+      nodejs = {
+        symbol = " ";
+        format = "[$symbol$version]($style) ";
+        style = "bold green";
+      };
+      rust = {
+        symbol = " ";
+        format = "[$symbol$version]($style) ";
+        style = "bold red";
+      };
+      golang = {
+        symbol = " ";
+        format = "[$symbol$version]($style) ";
+        style = "bold cyan";
+      };
 
       # NixOS
-      "nix_shell" = {
+      nix_shell = {
         symbol = "❄️  ";
         format = "via [$symbol$state]($style) ";
         style = "bold blue";
