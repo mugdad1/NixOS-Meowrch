@@ -242,15 +242,7 @@
         thunar-media-tags-plugin # Edit audio file metadata
       ];
     };
-    # Steam gaming platform with network features
-    steam = {
-      enable = true;
-      remotePlay.openFirewall = true;
-      dedicatedServer.openFirewall = true;
-      localNetworkGameTransfers.openFirewall = true;
-    };
-    # Performance optimization daemon for gaming
-    gamemode.enable = true;
+
   };
 
   # ╔════════════════════════════════════════════════════════════════════════════╗

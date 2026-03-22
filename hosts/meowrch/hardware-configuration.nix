@@ -118,13 +118,7 @@
   environment.systemPackages = with pkgs; [
     # Capability / info (glxinfo is part of mesa-demos)
     vulkan-tools
-    mesa-demos
-    gpu-viewer
     glmark2
-
-    # Performance / overlays
-    mangohud
-    goverlay
 
     # Wayland utilities
     wlr-randr

@@ -1,4 +1,10 @@
-{ config, pkgs, lib, meowrchUser, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  meowrchUser,
+  ...
+}:
 
 {
   # Security Configuration
@@ -175,18 +181,11 @@
     libsecret
 
     # Security tools (fail2ban and clamav may not be available)
-    keepassxc
 
     # Encryption tools
     gnupg
     openssl
 
-    # System monitoring
-    lynis
-
-    # Network security
-    nmap
-    wireshark
   ];
 
   # Kernel security parameters
@@ -271,7 +270,7 @@
 
   # User security groups
   users.groups = {
-    secure = {};
+    secure = { };
   };
 
   # Add security-related groups (user groups defined in main configuration.nix)
