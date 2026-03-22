@@ -105,20 +105,9 @@
       enable = true;
       dnssec = lib.mkDefault "true";
       domains = [ "~." ];
-
-      # AdGuard DNS (blocks ads and trackers)
-      servers = [
-        "94.140.14.14" # AdGuard Default (Primary)
-        "94.140.15.15" # AdGuard Default (Secondary)
-      ];
-
-      # Fallback DNS servers (if AdGuard is unreachable)
-      fallbackDns = [
-        "1.1.1.1" # Cloudflare
-        "8.8.8.8" # Google
-      ];
-
       extraConfig = ''
+        DNS=94.140.14.14 94.140.15.15
+        FallbackDNS=1.1.1.1 8.8.8.8
         DNSOverTLS=yes
         MulticastDNS=yes
         LLMNR=yes
