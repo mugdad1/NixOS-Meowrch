@@ -75,7 +75,7 @@
       golang = { symbol = " "; format = "[$symbol$version]($style) "; style = "bold cyan"; };Node
 
       # NixOS
-      nix_shell = {
+      "nix_shell" = {
         symbol = "❄️  ";
         format = "via [$symbol$state]($style) ";
         style = "bold blue";
