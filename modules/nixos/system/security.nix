@@ -7,27 +7,26 @@
 }:
 
 {
-  # Security Configuration
+  # ============================================================================
+  # SECURITY CONFIGURATION
+  # ============================================================================
+
   security = {
-    # Enable polkit for privilege escalation
+    # Privilege Escalation with polkit
     polkit = {
       enable = true;
       extraConfig = ''
         polkit.addRule(function(action, subject) {
-            if (
-                subject.isInGroup("users")
-                    && (
-                        action.id == "org.freedesktop.login1.reboot" ||
-                        action.id == "org.freedesktop.login1.reboot-multiple-sessions" ||
-                        action.id == "org.freedesktop.login1.power-off" ||
-                        action.id == "org.freedesktop.login1.power-off-multiple-sessions" ||
-                        action.id == "org.freedesktop.login1.suspend" ||
-                        action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
-                        action.id == "org.freedesktop.login1.hibernate" ||
-                        action.id == "org.freedesktop.login1.hibernate-multiple-sessions"
-                    )
-                )
-            {
+            if (subject.isInGroup("users") && (
+                action.id == "org.freedesktop.login1.reboot" ||
+                action.id == "org.freedesktop.login1.reboot-multiple-sessions" ||
+                action.id == "org.freedesktop.login1.power-off" ||
+                action.id == "org.freedesktop.login1.power-off-multiple-sessions" ||
+                action.id == "org.freedesktop.login1.suspend" ||
+                action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
+                action.id == "org.freedesktop.login1.hibernate" ||
+                action.id == "org.freedesktop.login1.hibernate-multiple-sessions"
+            )) {
                 return polkit.Result.YES;
             }
         });
@@ -45,13 +44,20 @@
                 return polkit.Result.YES;
             }
         });
+
+        polkit.addRule(function(action, subject) {
+            if (action.id == "org.freedesktop.login1.set-brightness" &&
+                subject.isInGroup("video")) {
+                return polkit.Result.YES;
+            }
+        });
       '';
     };
 
-    # RTKit for real-time scheduling
+    # Real-time scheduling for audio/video
     rtkit.enable = true;
 
-    # PAM configuration
+    # PAM Configuration
     pam = {
       loginLimits = [
         {
@@ -89,19 +95,11 @@
       services = {
         login.enableGnomeKeyring = true;
         passwd.enableGnomeKeyring = true;
-        gdm.enableGnomeKeyring = true;
         sddm.enableGnomeKeyring = true;
-
-        # Enable fingerprint authentication if available
-        login.fprintAuth = false;
-        sudo.fprintAuth = false;
-
-        # Security settings
-        su.requireWheel = true;
       };
     };
 
-    # Sudo configuration
+    # Sudo Configuration
     sudo = {
       enable = true;
       wheelNeedsPassword = true;
@@ -109,46 +107,17 @@
 
       extraRules = [
         {
+          groups = [ "wheel" ];
           commands = [
             {
-              command = "${pkgs.systemd}/bin/systemctl suspend";
+              command = "${pkgs.nixos-rebuild}/bin/nixos-rebuild";
               options = [ "NOPASSWD" ];
             }
             {
-              command = "${pkgs.systemd}/bin/systemctl reboot";
-              options = [ "NOPASSWD" ];
-            }
-            {
-              command = "${pkgs.systemd}/bin/systemctl poweroff";
-              options = [ "NOPASSWD" ];
-            }
-            {
-              command = "${pkgs.systemd}/bin/systemctl restart bluetooth";
-              options = [ "NOPASSWD" ];
-            }
-            {
-              command = "${pkgs.systemd}/bin/systemctl restart NetworkManager";
-              options = [ "NOPASSWD" ];
-            }
-            {
-              command = "${pkgs.brightnessctl}/bin/brightnessctl";
+              command = "${pkgs.systemd}/bin/systemctl";
               options = [ "NOPASSWD" ];
             }
           ];
-          groups = [ "wheel" ];
-        }
-        {
-          commands = [
-            {
-              command = "${pkgs.nixos-rebuild}/bin/nixos-rebuild switch";
-              options = [ "NOPASSWD" ];
-            }
-            {
-              command = "${pkgs.nixos-rebuild}/bin/nixos-rebuild boot";
-              options = [ "NOPASSWD" ];
-            }
-          ];
-          groups = [ "wheel" ];
         }
         {
           users = [ meowrchUser ];
@@ -166,129 +135,202 @@
         Defaults insults
         Defaults lecture=never
         Defaults pwfeedback
+        Defaults use_pty
       '';
     };
 
-    # User namespaces (security vs compatibility trade-off)
+    # User namespaces (needed for containers, development)
     allowUserNamespaces = true;
   };
 
-  # Security packages
+  # ============================================================================
+  # KERNEL HARDENING
+  # ============================================================================
+
+  boot = {
+    kernel.sysctl = {
+      # Performance vs. security
+      "kernel.nmi_watchdog" = 0;
+
+      # Pointer and information disclosure prevention
+      "kernel.kptr_restrict" = 2;
+      "kernel.printk" = "3 3 3 3";
+      "kernel.dmesg_restrict" = 1;
+
+      # Address Space Layout Randomization
+      "kernel.randomize_va_space" = 2;
+
+      # Process tracing restrictions
+      "kernel.yama.ptrace_scope" = 1;
+
+      # Kexec restrictions
+      "kernel.kexec_load_disabled" = 1;
+
+      # Allow unprivileged user namespaces for development
+      "kernel.unprivileged_userns_clone" = 1;
+
+      # Network security (complementary to network config)
+      "net.core.bpf_jit_harden" = 2;
+
+      # Memory protection
+      "vm.mmap_rnd_bits" = 32;
+      "vm.mmap_rnd_compat_bits" = 16;
+
+      # Filesystem protections
+      "fs.protected_hardlinks" = 1;
+      "fs.protected_symlinks" = 1;
+      "fs.protected_fifos" = 2;
+      "fs.protected_regular" = 2;
+      "fs.suid_dumpable" = 0;
+
+      # Restrict kernel module loading after boot (dev-friendly: keep at 0)
+      "kernel.modules_disabled" = 0;
+    };
+
+    # Blacklisted kernel modules
+    blacklistedKernelModules = [
+      # Uncommon network protocols
+      "dccp"
+      "sctp"
+      "rds"
+      "tipc"
+
+      # Rare filesystems (squashfs NOT disabled — required by NixOS)
+      "freevxfs"
+      "jffs2"
+      "hfs"
+      "hfsplus"
+      "udf"
+
+      # DMA attack vectors
+      "firewire-core"
+      "firewire-ohci"
+      "firewire-sbp2"
+      "thunderbolt"
+    ];
+  };
+
+  # ============================================================================
+  # SYSTEM PACKAGES
+  # ============================================================================
+
   environment.systemPackages = with pkgs; [
-    # Authentication
-    polkit_gnome
+    # Authentication and credential management
+    polkit_kde_agent # For Hyprland/SDDM
     gnome-keyring
     libsecret
 
-    # Security tools (fail2ban and clamav may not be available)
-
-    # Encryption tools
+    # Encryption
     gnupg
     openssl
-
   ];
 
-  # Kernel security parameters
-  boot.kernel.sysctl = {
-    # Disable NMI watchdog for performance
-    "kernel.nmi_watchdog" = 0;
+  # ============================================================================
+  # SERVICES
+  # ============================================================================
 
-    # Kernel pointer restriction
-    "kernel.kptr_restrict" = 2;
-
-    # Restrict access to kernel logs
-    "kernel.printk" = "3 3 3 3";
-
-    # Restrict kernel log access
-    "kernel.dmesg_restrict" = 1;
-
-    # Enable ASLR
-    "kernel.randomize_va_space" = 2;
-
-    # Restrict ptrace
-    "kernel.yama.ptrace_scope" = 1;
-
-    # Disable kexec
-    "kernel.kexec_load_disabled" = 1;
-
-    # Disable user namespaces for unprivileged users
-    "kernel.unprivileged_userns_clone" = 1;
-
-    # Network security
-    "net.core.bpf_jit_harden" = 2;
-
-    # Memory protection
-    "vm.mmap_rnd_bits" = 32;
-    "vm.mmap_rnd_compat_bits" = 16;
-
-    # Filesystem security
-    "fs.protected_hardlinks" = 1;
-    "fs.protected_symlinks" = 1;
-    "fs.protected_fifos" = 2;
-    "fs.protected_regular" = 2;
-    "fs.suid_dumpable" = 0;
-  };
-
-  # Blacklist kernel modules
-  boot.blacklistedKernelModules = [
-    # Uncommon network protocols
-    "dccp"
-    "sctp"
-    "rds"
-    "tipc"
-
-    # Rare filesystems (squashfs НЕ блокируем — NixOS использует его для nix store!)
-    "freevxfs"
-    "jffs2"
-    "hfs"
-    "hfsplus"
-    "udf"
-
-    # Firewire (can be used for DMA attacks)
-    "firewire-core"
-    "firewire-ohci"
-    "firewire-sbp2"
-
-    # Thunderbolt (can be used for DMA attacks)
-    "thunderbolt"
-
-    # USB storage (uncomment if you want to disable USB storage)
-    # "usb-storage"
-
-    # Webcam (uncomment if you want to disable webcam)
-    # "uvcvideo"
-  ];
-
-  # Services for security
   services = {
-    # GNOME Keyring for credential storage (Zed IDE, etc)
+    # Credential storage
     gnome.gnome-keyring.enable = true;
 
-    # UDisks2 for secure disk management
+    # Disk management
     udisks2.enable = true;
+
+    # Audit logging for security events
+    audit = {
+      enable = true;
+      rules = [
+        "-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change"
+        "-a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change"
+        "-a always,exit -F arch=b64 -S clock_settime -k time-change"
+        "-a always,exit -F arch=b32 -S clock_settime -k time-change"
+        "-w /etc/sudoers -p wa -k scope"
+        "-w /etc/sudoers.d/ -p wa -k scope"
+      ];
+    };
   };
 
-  # User security groups
-  users.groups = {
-    secure = { };
+  # ============================================================================
+  # SYSTEMD SERVICE HARDENING
+  # ============================================================================
+
+  systemd.services = {
+    # Harden UDisks2
+    udisks2.serviceConfig = {
+      PrivateTmp = true;
+      NoNewPrivileges = true;
+      ProtectSystem = "strict";
+      ProtectHome = true;
+      ProtectKernelTunables = true;
+      ProtectControlGroups = true;
+      RestrictRealtime = true;
+      RestrictNamespaces = true;
+      LockPersonality = true;
+      ProtectClock = true;
+      ProtectHostname = true;
+    };
+
+    # Harden NetworkManager
+    NetworkManager.serviceConfig = {
+      PrivateTmp = true;
+      NoNewPrivileges = true;
+      ProtectKernelTunables = true;
+      ProtectControlGroups = true;
+      RestrictRealtime = true;
+      RestrictNamespaces = true;
+      LockPersonality = true;
+    };
+
+    # Harden auditd
+    audit.serviceConfig = {
+      PrivateTmp = true;
+      NoNewPrivileges = true;
+      ProtectSystem = "strict";
+      ProtectHome = true;
+    };
   };
 
-  # Add security-related groups (user groups defined in main configuration.nix)
+  # ============================================================================
+  # SYSTEMD USER SERVICES (Hyprland-specific)
+  # ============================================================================
 
-  # SystemD security services (polkit agent is configured in main configuration.nix)
+  systemd.user.services = {
+    # Auto-start polkit agent for Hyprland
+    polkit-kde-agent = {
+      Unit = {
+        Description = "KDE Polkit Authentication Agent";
+        After = [ "graphical-session-pre.target" ];
+        PartOf = [ "graphical-session.target" ];
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
+      Service = {
+        Type = "simple";
+        ExecStart = "${pkgs.polkit_kde_agent}/libexec/polkit-kde-authentication-agent-1";
+        Restart = "on-failure";
+        RestartSec = 1;
+        TimeoutStopSec = 10;
+      };
+    };
+  };
 
-  # Security environment variables
+  # ============================================================================
+  # ENVIRONMENT VARIABLES
+  # ============================================================================
+
   environment.sessionVariables = {
-    # Harden memory allocator
+    # Memory allocator hardening
     MALLOC_CHECK_ = "2";
     MALLOC_PERTURB_ = "1";
 
-    # Browser security
+    # Wayland security
     MOZ_ENABLE_WAYLAND = "1";
     MOZ_USE_XINPUT2 = "1";
   };
 
-  # File permissions and security
+  # ============================================================================
+  # FILESYSTEM SECURITY
+  # ============================================================================
+
   systemd.tmpfiles.rules = [
     "d /tmp 1777 root root - -"
     "d /var/tmp 1777 root root - -"
