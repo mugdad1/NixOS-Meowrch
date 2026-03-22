@@ -129,7 +129,6 @@
     # Wayland utilities
     wlr-randr
     wayland-utils
-    kdePackages.kdenlive
     # Debugging & tracing
     renderdoc
     apitrace
