@@ -49,6 +49,7 @@
     wget
     curl
     networkmanagerapplet
+    tor-browser
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                        DEVELOPMENT                                        ║

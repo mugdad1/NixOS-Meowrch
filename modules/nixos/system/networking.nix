@@ -47,8 +47,7 @@
 
     # Enable systemd-resolved
     nameservers = [
-      "8.8.8.8"
-      "8.8.4.4"
+      "94.140.14.14"
     ];
 
     # Firewall configuration
