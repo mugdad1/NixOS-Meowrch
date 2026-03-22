@@ -39,7 +39,6 @@ in
       hide-scrollbar = true;
       sidebar-mode = true;
       hover-select = true;
-      me-accept-entry = "MousePrimary";
       window-format = "[{w}] ··· {t}";
       click-to-exit = true;
       max-history-size = 25;

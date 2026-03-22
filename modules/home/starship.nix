@@ -37,12 +37,12 @@
         conflicted = "🏳";
         up_to_date = " ";
         untracked = " ";
-        ahead = "⇡''${count}";
-        diverged = "⇕⇡''${ahead_count}⇣''${behind_count}";
-        behind = "⇣''${count}";
+        ahead = "⇡$count";
+        diverged = "⇕⇡$ahead_count⇣$behind_count";
+        behind = "⇣$count";
         stashed = " ";
         modified = " ";
-        staged = "[++''${count}](green)";
+        staged = "[++$count](green)";
         renamed = "襁 ";
         deleted = " ";
       };
