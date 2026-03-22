@@ -106,19 +106,6 @@
     NIXPKGS_ALLOW_UNFREE = "1";
   };
 
-  # Spotify customization with Catppuccin theme and extensions
-  programs.spicetify = {
-    enable = true;
-    theme = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system}.themes.catppuccin;
-    colorScheme = "mocha";
-    enabledExtensions =
-      with inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system}.extensions; [
-        adblock
-        hidePodcasts
-        shuffle
-      ];
-  };
-
   # Catppuccin Mocha theme for system-wide consistency
   catppuccin = {
     enable = true;

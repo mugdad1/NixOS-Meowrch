@@ -31,8 +31,6 @@
         # Hardware and system-level modules
         ../../modules/nixos/system/audio.nix
         ../../modules/nixos/system/bluetooth.nix
-        ../../modules/nixos/system/graphics.nix
-        ../../modules/nixos/system/graphics-amd.nix
         ../../modules/nixos/system/networking.nix
         ../../modules/nixos/system/security.nix
         ../../modules/nixos/system/services.nix
@@ -119,7 +117,7 @@
       "splash"
     ];
     # Use latest kernel by default; NVIDIA module overrides to stable for driver compatibility
-    kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+    kernelPackages = lib.mkDefault pkgs.linuxPackages_zen;
     # Plymouth disabled: causes DRM lock issues and blinking cursor on some GPUs
     plymouth.enable = false;
   };
@@ -244,15 +242,7 @@
         thunar-media-tags-plugin # Edit audio file metadata
       ];
     };
-    # Steam gaming platform with network features
-    steam = {
-      enable = true;
-      remotePlay.openFirewall = true;
-      dedicatedServer.openFirewall = true;
-      localNetworkGameTransfers.openFirewall = true;
-    };
-    # Performance optimization daemon for gaming
-    gamemode.enable = true;
+
   };
 
   # ╔════════════════════════════════════════════════════════════════════════════╗
