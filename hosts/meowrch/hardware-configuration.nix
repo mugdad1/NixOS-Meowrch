@@ -76,9 +76,8 @@
     enable = true;
     enable32Bit = true;
 
-    extraPackages =
-      with pkgs;
-      [
+    extraPackages = lib.concatLists [
+      (with pkgs; [
         mesa
         libva
         libva-utils
@@ -87,14 +86,17 @@
         vulkan-tools
         vulkan-validation-layers
         vulkan-extension-layer
-        (lib.optional (builtins.hasAttr "vulkan-intel" pkgs) pkgs.vulkan-intel)
         intel-media-driver
         intel-vaapi-driver
         libva-vdpau-driver
         libvdpau-va-gl
         vpl-gpu-rt
-      ]
-      ++ lib.optional (builtins.hasAttr "driversi686Linux" pkgs) (with pkgs.driversi686Linux; [ mesa ]);
+      ])
+      (if builtins.hasAttr "vulkan-intel" pkgs then [ pkgs.vulkan-intel ] else [ ])
+    ];
+
+    # Avoid pulling a second mesa copy. Leave empty unless you need specific 32-bit libs.
+    extraPackages32 = [ ];
   };
 
   ############################################
@@ -122,7 +124,7 @@
   ############################################
   environment.systemPackages = with pkgs; [
     linux-firmware
-    intel-microcode
+    microcode-intel
     vulkan-tools
     glmark2
 
