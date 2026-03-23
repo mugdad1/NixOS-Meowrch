@@ -100,7 +100,7 @@
     # Default applications for editing, browsing, and terminal
     EDITOR = "zed";
     VISUAL = "zed";
-    BROWSER = "firefox";
+    BROWSER = "zen-beta";
     TERMINAL = "kitty";
 
     # Allow unfree packages in nixpkgs
@@ -179,7 +179,7 @@
 
   # Default Zed settings (symlinked, can be modified at runtime)
   home.file.".cache/meowrch/zed/settings.json".text = builtins.toJSON {
-    theme = "One Dark Pro";
+    theme = "One Dark";
     theme_mode = "dark";
     ui_font_size = 14;
     buffer_font_size = 14;

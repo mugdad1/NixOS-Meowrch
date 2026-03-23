@@ -239,5 +239,4 @@
   # ENVIRONMENT VARIABLES
   # ============================================================================
 
-  environment.sessionVariables.BROWSER = "firefox";
 }

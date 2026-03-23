@@ -226,7 +226,7 @@ in
       # Editor & Terminal
       set -gx EDITOR micro
       set -gx VISUAL micro
-      set -gx BROWSER firefox
+      set -gx BROWSER zen-beta
       set -gx TERMINAL kitty
 
       # XDG Base Directory
