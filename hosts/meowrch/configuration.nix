@@ -171,9 +171,9 @@
       XDG_CACHE_HOME = "$HOME/.cache";
 
       # Default applications for editing, browsing, and terminal emulation
-      EDITOR = "micro";
-      VISUAL = "micro";
-      BROWSER = "firefox";
+      EDITOR = "zed";
+      VISUAL = "zed";
+      BROWSER = "zen-beta";
       TERMINAL = "kitty";
 
       # Wayland and Qt configuration for modern desktop environments
@@ -200,7 +200,7 @@
       # Editor shortcuts
       g = "git";
       n = "nvim";
-      m = "micro";
+      z = "zed";
 
       # NixOS rebuild and update commands
       rebuild = "sudo nixos-rebuild switch --flake .#meowrch";

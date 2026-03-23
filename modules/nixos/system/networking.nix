@@ -239,5 +239,5 @@
   # ENVIRONMENT VARIABLES
   # ============================================================================
 
-  environment.sessionVariables.BROWSER = "firefox";
+  environment.sessionVariables.BROWSER = "zen-betaq";
 }

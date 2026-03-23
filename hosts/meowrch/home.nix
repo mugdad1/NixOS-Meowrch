@@ -100,7 +100,7 @@
     # Default applications for editing, browsing, and terminal
     EDITOR = "zed";
     VISUAL = "zed";
-    BROWSER = "firefox";
+    BROWSER = "zen-beta";
     TERMINAL = "kitty";
 
     # Allow unfree packages in nixpkgs
