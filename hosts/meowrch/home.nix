@@ -15,7 +15,7 @@
     ../../modules/home/gtk.nix
     ../../modules/home/fish.nix
     ../../modules/home/starship.nix
-    ../../modules/home/zen
+    ../../modules/home/zen-browser.nix
   ];
 
   # Basic user configuration
