@@ -118,7 +118,6 @@
     rocmPackages.amdsmi
     amdgpu_top
     lact
-    amd
     clinfo
     mesa-demos
     # Video editing
