@@ -1,42 +1,27 @@
-{ config, pkgs, lib, ... }:
-#
-# Audio stack configuration (PipeWire + WirePlumber) with sane low‑latency
-# defaults. Bluetooth is managed in a dedicated bluetooth module. Kept intentionally concise;
-# firmware enabling is handled globally (do NOT add enableAllFirmware here).
-#
-# Safe to import on any host.
 {
-  ############################################
-  # PipeWire / WirePlumber
-  ############################################
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
+  # PipeWire audio stack with low-latency defaults
+  # Bluetooth audio is configured separately in bluetooth.nix
+  # Safe to import on any host
+
   services.pipewire = {
     enable = true;
-
-    # ALSA compatibility (32‑bit for games / legacy)
     alsa = {
       enable = true;
       support32Bit = true;
     };
-
-    pulse.enable = true;   # PulseAudio replacement layer
-    jack.enable = true;    # JACK compatibility
+    pulse.enable = true;
+    jack.enable = true;
     wireplumber.enable = true;
   };
 
-  ############################################
-  # Disable legacy PulseAudio daemon
-  ############################################
   services.pulseaudio.enable = false;
 
-  ############################################
-  # Bluetooth (A2DP / headset) integration
-  # NOTE: Full Bluetooth configuration is in bluetooth.nix
-  # We only need to ensure Bluetooth audio works with PipeWire
-  ############################################
-
-  ############################################
-  # Packages (userland tools)
-  ############################################
   environment.systemPackages = with pkgs; [
     pavucontrol
     pamixer
@@ -44,69 +29,69 @@
     wireplumber
   ];
 
-  ############################################
-  # Udev rules (permissions)
-  ############################################
+  # Audio device permissions
   services.udev.extraRules = ''
     SUBSYSTEM=="sound", GROUP="audio", MODE="0664"
     KERNEL=="controlC[0-9]*", GROUP="audio", MODE="0664"
   '';
 
-  ############################################
-  # Low latency tuning (PipeWire)
-  ############################################
-  services.pipewire.extraConfig.pipewire."92-low-latency" = {
-    context.properties = {
-      default.clock.rate = 48000;
-      default.clock.quantum = 32;
-      default.clock.min-quantum = 32;
-      default.clock.max-quantum = 32;
+  # Low-latency tuning (32 samples @ 48kHz)
+  services.pipewire.extraConfig = {
+    pipewire."92-low-latency" = {
+      context.properties = {
+        default.clock.rate = 48000;
+        default.clock.quantum = 32;
+        default.clock.min-quantum = 32;
+        default.clock.max-quantum = 32;
+      };
+    };
+    pipewire-pulse."92-low-latency" = {
+      context.modules = [
+        {
+          name = "libpipewire-module-protocol-pulse";
+          args = {
+            pulse.min.req = "32/48000";
+            pulse.default.req = "32/48000";
+            pulse.max.req = "32/48000";
+            pulse.min.quantum = "32/48000";
+            pulse.max.quantum = "32/48000";
+          };
+        }
+      ];
+      stream.properties = {
+        node.latency = "32/48000";
+        resample.quality = 1;
+      };
     };
   };
 
-  services.pipewire.extraConfig.pipewire-pulse."92-low-latency" = {
-    context.modules = [
-      {
-        name = "libpipewire-module-protocol-pulse";
-        args = {
-          pulse.min.req = "32/48000";
-          pulse.default.req = "32/48000";
-          pulse.max.req = "32/48000";
-          pulse.min.quantum = "32/48000";
-          pulse.max.quantum = "32/48000";
-        };
-      }
-    ];
-    stream.properties = {
-      node.latency = "32/48000";
-      resample.quality = 1;
-    };
-  };
-
-  ############################################
-  # Kernel / driver tweaks (kept minimal)
-  ############################################
+  # Kernel audio modules
   boot.kernelModules = [
     "snd-seq"
     "snd-rawmidi"
   ];
 
+  # HDA power management (prevent codec wake delay/pop)
   boot.kernelParams = [
-    # Keep HDA powered (avoid wake delay / pop on some codecs)
     "snd_hda_intel.power_save=0"
     "snd_hda_intel.power_save_controller=N"
   ];
 
-  ############################################
-  # PAM limits for real‑time & lockable memory
-  ############################################
+  # Real-time & memory locking for audio group
   security.pam.loginLimits = [
-    { domain = "@audio"; type = "-"; item = "rtprio";  value = "95"; }
-    { domain = "@audio"; type = "-"; item = "memlock"; value = "unlimited"; }
+    {
+      domain = "@audio";
+      type = "-";
+      item = "rtprio";
+      value = "95";
+    }
+    {
+      domain = "@audio";
+      type = "-";
+      item = "memlock";
+      value = "unlimited";
+    }
   ];
 
-  ############################################
-  # Helpful latency hint (non‑critical)
-  ############################################
   environment.sessionVariables.PIPEWIRE_LATENCY = "32/48000";
 }

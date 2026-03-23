@@ -8,152 +8,106 @@
 }:
 
 {
-  # Networking Configuration
+  # ============================================================================
+  # NETWORKING CORE
+  # ============================================================================
+
   networking = {
     hostName = meowrchHostname;
+    enableIPv6 = true;
 
-    # Enable NetworkManager
+    # DNS via systemd-resolved (no need for static nameservers here)
+    proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+    # NetworkManager (primary network management)
     networkmanager = {
       enable = true;
-      wifi.powersave = false;
-      ethernet.macAddress = "preserve";
-      wifi.macAddress = "preserve";
-
-      # DNS configuration
       dns = "systemd-resolved";
-
-      # Connection sharing
-      unmanaged = [
-        "*,except:type:wifi,except:type:ethernet"
-      ];
-
-      # NetworkManager settings (NixOS 25.11 format)
+      wifi = {
+        powersave = false;
+        macAddress = "preserve";
+      };
+      ethernet.macAddress = "preserve";
+      unmanaged = [ "*,except:type:wifi,except:type:ethernet" ];
       settings = {
         connectivity = {
           uri = "http://nmcheck.gnome.org/check_network_status.txt";
           interval = 300;
         };
-        connection = {
-          # 0 = unknown, 1 = yes, 2 = no, 3 = none (guess)
-          "connection.metered" = 2;
-        };
+        connection."connection.metered" = 2;
       };
     };
 
-    # Wireless configuration
-    wireless = {
-      enable = false; # We use NetworkManager instead
-    };
+    wireless.enable = false; # Using NetworkManager instead
+    dhcpcd.enable = false; # Using NetworkManager instead
 
-    # Enable systemd-resolved
-    nameservers = [
-      "1.1.1.1"
-      "8.8.8.8"
-      "1.0.0.1"
-      "8.8.4.4"
-    ];
+    # ============================================================================
+    # FIREWALL
+    # ============================================================================
 
-    # Firewall configuration
     firewall = {
       enable = true;
+      allowPing = true;
+      logReversePathDrops = true;
+      connectionTrackingModules = [
+        "ftp"
+        "irc"
+      ];
+
+      # Standard services
       allowedTCPPorts = [
         22 # SSH
         80 # HTTP
         443 # HTTPS
         8080 # Alternative HTTP
       ];
+
       allowedUDPPorts = [
         53 # DNS
         67 # DHCP
         68 # DHCP
+        5353 # mDNS
       ];
 
-      # Allow specific applications
+      # KDE Connect
       allowedTCPPortRanges = [
         {
           from = 1714;
           to = 1764;
-        } # KDE Connect
+        }
       ];
       allowedUDPPortRanges = [
         {
           from = 1714;
           to = 1764;
-        } # KDE Connect
+        }
       ];
 
-      # Disable ping
-      allowPing = true;
-
-      # Log dropped packets
-      logReversePathDrops = true;
-
-      # Enable connection tracking helpers
-      connectionTrackingModules = [
-        "ftp"
-        "irc"
-        "sane"
-      ];
-
-      # Custom rules
+      # Custom iptables rules
       extraCommands = ''
-        # Allow loopback
+        # Loopback traffic
         iptables -A INPUT -i lo -j ACCEPT
         iptables -A OUTPUT -o lo -j ACCEPT
 
-        # Allow established and related connections
+        # Established and related connections
         iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-
-        # Allow mDNS
-        iptables -A INPUT -p udp --dport 5353 -j ACCEPT
       '';
     };
-
-    # IPv6 configuration
-    enableIPv6 = true;
-
-    # Proxy configuration
-    proxy = {
-      default = null;
-      noProxy = "127.0.0.1,localhost,internal.domain";
-    };
-
-    # Network bridge for VMs
-    bridges = { };
-
-    # DHCP configuration
-    dhcpcd.enable = false; # We use NetworkManager
-
-    # Static network configuration (commented out - using DHCP via NetworkManager)
-    # interfaces = {
-    #   enp0s3 = {
-    #     ipv4.addresses = [{
-    #       address = "192.168.1.100";
-    #       prefixLength = 24;
-    #     }];
-    #   };
-    # };
-    # defaultGateway = "192.168.1.1";
   };
 
-  # Network services
-  services = {
-    # Network Manager OpenVPN support
-    # networkmanager-openvpn.enable = true; # This option doesn't exist in services
+  # ============================================================================
+  # NETWORK SERVICES
+  # ============================================================================
 
-    # Resolved for DNS
+  services = {
+    # DNS Resolution with systemd-resolved and AdGuard DNS
     resolved = {
       enable = true;
-      domains = [ "~." ];
-      fallbackDns = [
-        "1.1.1.1"
-        "8.8.8.8"
-        "1.0.0.1"
-        "8.8.4.4"
-      ];
       dnssec = lib.mkDefault "true";
+      domains = [ "~." ];
       extraConfig = ''
-        DNS=8.8.8.8 1.0.0.1 8.8.4.4
+        DNS=94.140.14.14 94.140.15.15
+        FallbackDNS=1.1.1.1 8.8.8.8
         DNSOverTLS=yes
         MulticastDNS=yes
         LLMNR=yes
@@ -162,7 +116,7 @@
       '';
     };
 
-    # Avahi for mDNS/Bonjour
+    # mDNS/Bonjour service discovery
     avahi = {
       enable = true;
       nssmdns4 = true;
@@ -175,15 +129,13 @@
         userServices = true;
         workstation = true;
       };
-      extraServiceFiles = {
-        ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
-      };
     };
 
-    # SSH configuration
+    # SSH Server
     openssh = {
       enable = true;
       ports = [ 22 ];
+      openFirewall = true;
       settings = {
         PasswordAuthentication = true;
         KbdInteractiveAuthentication = false;
@@ -191,11 +143,9 @@
         X11Forwarding = false;
         PrintMotd = false;
       };
-      openFirewall = true;
     };
 
-    # Network Time Protocol
-    ntp.enable = false; # We use systemd-timesyncd instead
+    # Network Time Synchronization
     timesyncd = {
       enable = true;
       servers = [
@@ -207,14 +157,17 @@
     };
   };
 
-  # Network packages
+  # ============================================================================
+  # SYSTEM PACKAGES
+  # ============================================================================
+
   environment.systemPackages = with pkgs; [
-    # Network utilities
+    # Network Management
     networkmanager
     networkmanagerapplet
     networkmanager-openvpn
 
-    # Command line tools
+    # Network Utilities
     wget
     curl
     dig
@@ -224,39 +177,36 @@
     whois
     iperf3
 
-    # Wireless tools
+    # Wireless Tools
     iw
     wpa_supplicant
-    wirelesstools
 
-    # VPN clients
+    # VPN Clients
     openvpn
     wireguard-tools
 
-    # Network monitoring
+    # Network Monitoring
     nethogs
     iftop
     bandwhich
 
-    # Firewall management (NixOS uses built-in firewall)
-    # ufw  # Not available in NixOS
-
-    # mDNS utilities
+    # Service Discovery
     avahi
   ];
 
-  # Users in network groups (defined in main configuration.nix)
+  # ============================================================================
+  # KERNEL OPTIMIZATION & SECURITY
+  # ============================================================================
 
-  # Network optimization
   boot.kernel.sysctl = {
-    # TCP optimization
+    # TCP Performance (BBR congestion control)
     "net.core.rmem_max" = 268435456;
     "net.core.wmem_max" = 268435456;
     "net.ipv4.tcp_rmem" = "4096 65536 268435456";
     "net.ipv4.tcp_wmem" = "4096 65536 268435456";
     "net.ipv4.tcp_congestion_control" = "bbr";
 
-    # Network security
+    # IPv4 Security
     "net.ipv4.conf.all.rp_filter" = 1;
     "net.ipv4.conf.default.rp_filter" = 1;
     "net.ipv4.icmp_echo_ignore_broadcasts" = 1;
@@ -272,19 +222,22 @@
     "net.ipv4.conf.all.send_redirects" = 0;
     "net.ipv4.conf.default.send_redirects" = 0;
 
-    # IPv6 security
+    # IPv6 Security
     "net.ipv6.conf.all.accept_redirects" = 0;
     "net.ipv6.conf.default.accept_redirects" = 0;
     "net.ipv6.conf.all.accept_source_route" = 0;
     "net.ipv6.conf.default.accept_source_route" = 0;
   };
 
-  # Systemd network wait online (disable to speed up boot)
+  # ============================================================================
+  # SYSTEMD CONFIGURATION
+  # ============================================================================
+
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  # Environment variables for networking
-  environment.sessionVariables = {
-    # Set default browser for network applications
-    BROWSER = "firefox";
-  };
+  # ============================================================================
+  # ENVIRONMENT VARIABLES
+  # ============================================================================
+
+  environment.sessionVariables.BROWSER = "firefox";
 }
