@@ -41,6 +41,7 @@
     udiskie
     polkit_gnome
     kdePackages.polkit-kde-agent-1
+    hyprsunset
 
     # ╔════════════════════════════════════════════════════════════════════════════╗
     # ║                        WEB & NETWORKING                                   ║
