@@ -113,13 +113,16 @@
     gpu-viewer
     glmark2
     radeontop
+    rocmPackages.rocm-core
+    rocmPackages.rocminfo
+    rocmPackages.amdsmi
     amdgpu_top
     lact
+    amd
     clinfo
-
+    mesa-demos
     # Video editing
-    kdePackages.kdenlive
-    ffmpeg
+    ffmpeg-full
     x264
     x265
 
