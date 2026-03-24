@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   # System Optimizations from meowrch-settings
@@ -13,11 +18,11 @@
       "net.core.netdev_max_backlog" = 4096;
       "fs.file-max" = 2097152;
     };
-    
+
     extraModprobeConfig = ''
       # NVIDIA GPU Optimizations
       options nvidia NVreg_UsePageAttributeTable=1 NVreg_InitializeSystemMemoryAllocations=0 NVreg_RegistryDwords=RmEnableAggressiveVblank=1 NVreg_EnableS0ixPowerManagement=1
-      
+
       # AMD GPU Optimizations
       options amdgpu si_support=1 cik_support=1
       options radeon si_support=0 cik_support=0
@@ -28,7 +33,7 @@
   services = {
     # Display Manager (SDDM configuration moved to desktop module)
     # displayManager configuration is handled in modules/desktop/sddm.nix
-
+    tailscaled = true;
     # Desktop Portal
     xserver = {
       enable = false; # We use Wayland
@@ -167,8 +172,6 @@
 
     # Automatic system updates (NixOS uses nix.gc and system.autoUpgrade)
     # Configure in main configuration.nix with system.autoUpgrade options
-
-
 
     # Avahi для mDNS — настраивается в networking.nix
     # avahi = { ... }; # перенесено в networking.nix
