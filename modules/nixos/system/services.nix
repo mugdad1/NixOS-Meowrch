@@ -33,7 +33,7 @@
   services = {
     # Display Manager (SDDM configuration moved to desktop module)
     # displayManager configuration is handled in modules/desktop/sddm.nix
-    tailscaled = true;
+    #tailscale.enable = true;
     # Desktop Portal
     xserver = {
       enable = false; # We use Wayland
