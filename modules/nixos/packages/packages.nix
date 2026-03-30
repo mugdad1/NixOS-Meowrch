@@ -38,6 +38,7 @@
     hyprlock
     pamixer
     playerctl
+    hyprsunset
     udiskie
     polkit_gnome
     kdePackages.polkit-kde-agent-1
