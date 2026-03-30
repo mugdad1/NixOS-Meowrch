@@ -40,7 +40,7 @@
       jetbrains-mono
       fira-code
       source-code-pro
-      mona-sans
+
       # Interface fonts
       inter
       roboto

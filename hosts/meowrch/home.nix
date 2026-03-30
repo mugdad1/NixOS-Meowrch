@@ -116,7 +116,7 @@
 
   # Firefox configuration with Wayland support, hardware acceleration, and essential extensions
   programs.firefox = {
-    enable = false;
+    enable = true;
     profiles.default = {
       id = 0;
       isDefault = true;

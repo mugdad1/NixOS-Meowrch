@@ -6,7 +6,7 @@ let
     owner = "meowrch";
     repo = "meowrch";
     rev = "main";
-    sha256 = "sha256-GV35PCsejRrEqPM3Np69nyiDh+49sWJAT9GmpbFUq1k="; 
+    sha256 = "sha256-/4xahsUainCSdl4SXWmMZzpgg497+H86/hL7h4vrstQ="; 
   };
 
   mocha-theme = fetchFromGitHub {

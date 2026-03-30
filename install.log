@@ -1,4 +1,4 @@
---- Meowrch NixOS Installation Log: Sat Mar 21 10:09:47 PM MSK 2026 ---
+--- Meowrch NixOS Installation Log: Mon Mar 30 09:19:46 PM MSK 2026 ---
 [H[2J[0;35m
                           ▄▀▄     ▄▀▄           ▄▄▄▄▄
                          ▄█░░▀▀▀▀▀░░█▄         █░▄▄░░█
@@ -33,9 +33,9 @@
 
 [0;32m? [0mProceed with installation? [[0;36my[0m]: 
 [1;33m==> Preparing Files[0m
-[0;34m[INFO] Source: /home/mugdad/NixOS-Meowrch[0m
+[0;34m[INFO] Source: /home/mugdad/nixos-meowrch[0m
 [0;34m[INFO] Target: /home/mugdad/NixOS-Meowrch[0m
-[0;34m[INFO] Already in target directory. Skipping clean and copy.[0m
+[0;34m[INFO] Copying configuration to /home/mugdad/NixOS-Meowrch...[0m
 [0;34m[INFO] Generating configuration for mugdad on meowrch-machine...[0m
 [1;33m==> Created user-local.nix with following content:[0m
 # Этот файл создан установщиком.
@@ -52,16 +52,16 @@
 [1;33m==> Installing System[0m
 [0;34m[INFO] Staging files in Git...[0m
 [0;34m[INFO] Verification of critical files:[0m
--rw-r--r-- 1 mugdad mugdad  3944 Mar 21 21:50 flake.nix
--rw-r--r-- 1 mugdad mugdad 14794 Mar 21 22:09 hosts/meowrch/configuration.nix
--rw-r--r-- 1 mugdad mugdad   946 Mar 21 22:09 hosts/meowrch/hardware-configuration.nix
--rw-r--r-- 1 mugdad mugdad  9143 Mar 21 21:50 hosts/meowrch/home.nix
+-rw-r--r-- 1 mugdad mugdad  4904 Mar 30 20:07 flake.nix
+-rw-r--r-- 1 mugdad mugdad 14436 Mar 30 21:19 hosts/meowrch/configuration.nix
+-rw-r--r-- 1 mugdad mugdad  1033 Mar 30 21:19 hosts/meowrch/hardware-configuration.nix
+-rw-r--r-- 1 mugdad mugdad  8755 Mar 30 20:07 hosts/meowrch/home.nix
 [0;34m[INFO] Starting 'nixos-rebuild boot' with --impure...[0m
 warning: Git tree '/home/mugdad/NixOS-Meowrch' is dirty
 building the system configuration...
 warning: Git tree '/home/mugdad/NixOS-Meowrch' is dirty
-Done. The new configuration is /nix/store/x3im4z6dmfdb9cwjrhs7n1mdfzcab6yr-nixos-system-meowrch-machine-25.11.20260320.812b398
+Done. The new configuration is /nix/store/6q3xilpm7myz5nv3zdirbrr0iy51cv58-nixos-system-meowrch-machine-25.11.20260320.812b398
 
 [0;32mUpdate Complete![0m
-[0;34mDetailed logs are saved to: /home/mugdad/NixOS-Meowrch/install.log[0m
+[0;34mDetailed logs are saved to: /home/mugdad/nixos-meowrch/install.log[0m
 Changes will be applied on next boot. Please reboot your system.
