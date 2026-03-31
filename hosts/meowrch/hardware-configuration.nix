@@ -1,4 +1,3 @@
-
 {
   config,
   lib,
@@ -41,19 +40,22 @@
     "vm.max_map_count" = 2147483642;
   };
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-uuid/b6e7a594-3b83-403e-943b-38322084da0e";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/b6e7a594-3b83-403e-943b-38322084da0e";
+    fsType = "ext4";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/5E76-84DA";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/5E76-84DA";
+    fsType = "vfat";
+    options = [
+      "fmask=0077"
+      "dmask=0077"
+    ];
+  };
 
   swapDevices = [ ];
-# ============================================
+  # ============================================
   # Graphics / GPU (AMD RX570 - Polaris)
   # ============================================
   hardware.graphics = {
