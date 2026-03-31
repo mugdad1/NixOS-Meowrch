@@ -107,6 +107,6 @@ in
       ++ lib.optionals cfg.thunderbird [ thunderbird ]
       ++ lib.optionals cfg.vscode [ vscode ]
       ++ lib.optionals cfg.zed [ zed-editor ]
-      ++ lib.optionals cfg.wine [ wine-wow64 ];
+      ++ lib.optionals cfg.wine [ wine-wine64 ];
   };
 }
